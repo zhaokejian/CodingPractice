@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+  <head>
+        <meta charset="utf-8">
+        <title>Epicylic Gearing</title>
+        <script src="jquery-1.7.1.min.js"></script>
+        <script src="gearing.js"></script>
+
+      <style type="text/css">
+
+      body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        width: 960px;
+        height: 500px;
+        position: relative;
+      }
+
+      form {
+        position: absolute;
+        top: 1em;
+        left: 1em;
+      }
+
+      path {
+        fill-rule: evenodd;
+        stroke: #333;
+        stroke-width: 2px;
+      }
+
+      .sun path {
+        fill: #6baed6;
+      }
+
+      .planet path {
+        fill: #9ecae1;
+      }
+
+      .annulus path {
+        fill: #c6dbef;
+      }
+      </style>
+    </head>
+
+    <body>
+        <form>
+          <input type="radio" name="reference" id="ref-annulus">
+          <label for="ref-annulus">Annulus</label><br>
+          <input type="radio" name="reference" id="ref-planet" checked>
+          <label for="ref-planet">Planets</label><br>
+          <input type="radio" name="reference" id="ref-sun">
+          <label for="ref-sun">Sun</label>
+        </form>
+        <script type="text/javascript">
+            var nowId;
+            var start = Date.now();
+            var angle_sun = 0, angle_planet = 0, angle_planet_rev = 0, angle_annulus = 0;
+
+            initializeGear();
+
+
+            function annulus(){
+                var linear = (Date.now() - start) * speed;
+
+                $('.planet').find('path').attr("transform", "rotate(" +
+                                            (angle_planet + linear * -2.5 / (RADIUS * 6))
+                                            + ")");
+                $('#planets').attr("transform", "rotate(" +
+                                            (angle_planet_rev + linear / (RADIUS * 6))
+                                            + ")");
+
+                $('.sun').find('path').attr("transform", "rotate(" +
+                                            (angle_sun + linear / (RADIUS))
+                                            + ")");
+            }
+
+            function planets(){
+                var linear = (Date.now() - start) * speed;
+
+                $('.annulus').find('path').attr("transform", "rotate(" +
+                                            (angle_annulus + linear / (-RADIUS * 5))
+                                            + ")");
+                $('.sun').find('path').attr("transform", "rotate(" +
+                                            (angle_sun + linear / (RADIUS))
+                                            + ")");
+                $('.planet').find('path').attr("transform", "rotate(" +
+                                            (angle_planet + linear / (-RADIUS * 2))
+                                            + ")");
+            }
+
+            function sun(){
+                var linear = (Date.now() - start) * speed * 5;
+
+                $('.planet').find('path').attr("transform", "rotate(" +
+                                            (angle_planet + linear / (-RADIUS * 12))
+                                            + ")");
+                $('#planets').attr("transform", "rotate(" +
+                                            (angle_planet_rev + linear * 2/ (-RADIUS * 12))
+                                            + ")");
+                $('.annulus').find('path').attr("transform", "rotate(" +
+                                            (angle_annulus + linear / (-RADIUS * 5))
+                                            + ")");
+            };
+
+            function epicylic_annulus(){
+                annulus();
+                nowId = window.requestAnimationFrame(epicylic_annulus);
+            }
+
+            function epicylic_planets(){
+                planets();
+                nowId = window.requestAnimationFrame(epicylic_planets);
+            }
+
+            function epicylic_sun(){
+                sun();
+                nowId = window.requestAnimationFrame(epicylic_sun);
+            }
+
+            nowId = window.requestAnimationFrame(epicylic_planets);
+
+            $("input[name=reference]").change(function(){
+                window.cancelAnimationFrame(nowId);
+                start = Date.now();
+
+                var annulus_temp = $('.annulus').find('path').attr("transform");
+                var annulus_temp2 = annulus_temp.substring(7, annulus_temp.length - 1);
+                angle_annulus = parseFloat(annulus_temp2);
+
+                var planet_temp = $('.planet').find('path').attr("transform");
+                var planet_temp2 = planet_temp.substring(7, planet_temp.length - 1);
+                angle_planet = parseFloat(planet_temp2);
+
+                var planet_rev_temp = $('#planets').attr("transform");
+                var planet_rev_temp2 = planet_rev_temp.substring(7, planet_rev_temp.length - 1);
+                angle_planet_rev = parseFloat(planet_rev_temp2);
+
+                var sun_temp = $('.sun').find('path').attr("transform");
+                var sun_temp2 = sun_temp.substring(7, sun_temp.length - 1);
+                angle_sun  = parseFloat(sun_temp2);
+
+                if(document.getElementById("ref-annulus").checked){
+                    console.log("annulus");
+                    nowId = window.requestAnimationFrame(epicylic_annulus);
+                }
+                if(document.getElementById("ref-planet").checked){
+                    console.log("planet");
+                    nowId = window.requestAnimationFrame(epicylic_planets);
+                }
+                if(document.getElementById("ref-sun").checked){
+                    console.log("sun");
+                    nowId = window.requestAnimationFrame(epicylic_sun);
+                }
+            });
+
+        </script>
+    </body>

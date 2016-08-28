@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+        <meta charset="utf-8">
+        <title>Stream Graph</title>
+        <script src="jquery-1.7.1.min.js"></script>
+        <script src="include.js"></script>
+        <script src="Stream.js"></script>
+        <script src="d3.min.js"></script>
+  </head>
+  <body>
+      <div id = "stream-graph"></div>
+      <div id = "d3"></div>
+      <script>
+      var n = 20; // number of layers
+      var m = 200; // number of samples per layer
+
+      var layers = new Array();
+
+      stack = d3.layout.stack().offset("wiggle"),
+      layers0 = stack(d3.range(n).map(function() { return bumpLayer(m, layers); })),
+      layers1 = stack(d3.range(n).map(function() { return bumpLayer(m, layers); }));
+
+  var width = 960,
+      height = 500;
+
+  var x = d3.scale.linear()
+      .domain([0, m - 1])
+      .range([0, width]);
+
+  var y = d3.scale.linear()
+      .domain([0, d3.max(layers0.concat(layers1), function(layer) { return d3.max(layer, function(d) { return d.y0 + d.y; }); })])
+      .range([height, 0]);
+
+  var color = d3.scale.linear()
+      .range(["#aad", "#556"]);
+
+  var area = d3.svg.area()
+      .x(function(d) { return x(d.x); })
+      .y0(function(d) { return y(d.y0); })
+      .y1(function(d) { return y(d.y0 + d.y); });
+
+  var svg = d3.select("#d3").append("svg")
+      .attr("width", width)
+      .attr("height", height);
+
+  svg.selectAll("path")
+      .data(layers0)
+    .enter().append("path")
+      .attr("d", area)
+      .style("fill", function() { return color(Math.random()); });
+
+
+
+
+      //
+    //   for(var i = 0; i < n; i++){
+    //       layers.push(bumpLayer(m));
+    //   }
+      stream(layers, "stream-graph", n, m);
+
+      </script>
+  </body>
+</html>

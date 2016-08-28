@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+        <meta charset="utf-8">
+        <title>Wordle</title>
+        <!-- <script src="jquery-1.7.1.min.js"></script> -->
+        <script src="include.js"></script>
+        <script src="wordle.js"></script>
+  </head>
+  <body>
+      <canvas id="drawing" width="800" height="800"></canvas>
+      <canvas id="try" width="800" height="800"></canvas>
+      <script>
+        var CanvasDraw = Canvas.createNew(document.getElementById("drawing"), 800, 800);
+        var CanvasTry =  Canvas.createNew(document.getElementById("try"), 800, 800);
+
+        var words = [
+            { text : "Hello",   weight : 0.3 },
+            { text : "world",  weight : 0.2 },
+            { text : "wordle",   weight : 0.18 },
+            { text : "Canvas",  weight : 0.15 },
+            { text : "JavaScript",  weight : 0.1 },
+            { text : "svg",  weight : 0.1 },
+            { text : "text",  weight : 0.08 },
+            { text : "HTML",  weight : 0.05 },
+            { text : "jquery",  weight : 0.04 },
+            { text : "rect",  weight : 0.02 },
+            { text : "include",  weight : 0.02 },
+            { text : "D3",      weight : 0.02 },
+            { text : "random",  weight : 0.01 }
+        ];
+        wordle(words, CanvasDraw, CanvasTry);
+        // var size = Math.ceil(500 * words[0].weight);
+        // var word = Word.createNew(words[0].text, 40, CanvasTry);
+        // var pos = Position.createNew(50, 50);
+        // //
+        //
+        // var context = CanvasDraw.canvas.getContext("2d");
+        // // context.font = "bold " + word.size + "px Georgia";
+        // // // context.fillText(word.text, pos.x, pos.y);
+        // // context.translate(pos.x, pos.y);
+        // // context.rotate(Math.PI/2);
+        // // context.translate(-pos.x, -pos.y);
+        // // context.fillText(word.text, pos.x, pos.y);
+        // // context.translate(pos.x, pos.y);
+        // // context.rotate(-Math.PI/2);
+        // // context.translate(-pos.x, -pos.y);
+        // word.draw(CanvasDraw, pos);
+        //
+        // var rect = word.toRect();
+        // context.strokeRect(rect.x, rect.y, rect.width, rect.height);
+
+      </script>
+  </body>
+</html>

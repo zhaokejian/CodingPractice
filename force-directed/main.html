@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+        <meta charset="utf-8">
+        <title>Force-Directed</title>
+        <script src="jquery-1.7.1.min.js"></script>
+        <script src="include.js"></script>
+        <script src="force-directed.js"></script>
+  </head>
+  <body>
+      <div id = "force-directed"></div>
+      <script type="text/javascript">
+      firstArrange();
+
+    //   drag();
+      function update(){
+          reArrange();
+          drag();
+          window.requestAnimationFrame(update);
+      }
+      window.requestAnimationFrame(update);
+
+      </script>
+  </body>
+</html>
